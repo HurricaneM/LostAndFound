@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8" />
+<!--    <meta http-equiv="Content-Type" content="multipart/form-data;  charset=utf-8" />-->
+
+    <title>Signin Template · Bootstrap</title>
+    <script type="text/javascript" src="http://localhost:8080/js/jquery-1.12.4.min.js"></script>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/sign-in/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://getbootstrap.com/docs/4.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body>
+<hr/>
+<h3>1、单文件上传</h3>
+<form  enctype="multipart/form-data" id="f1">
+<!--    上传人：<input type="text" name="userName" /><br/>-->
+    文件一：<input type="file" name="file" id="upfile"/><br/>
+<!--    <input type="submit" value="Submit" />-->
+<!--    <input type="button" id="b1">tijiao</input>-->
+</form>
+<input type="button" id="b1">tijiao</input>
+
+<script type="text/javascript">
+    $("#b1").click(function () {
+        alert("111")
+        var formData = new FormData();
+        formData.append('file', $("#upfile")[0].files[0]);
+        $.ajax({
+            url:"http://localhost:8080/upload1",
+            type:"POST",
+            dataType:"json",
+            encType: 'multipart/form-data',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success:function(result){
+
+                alert(result.status)
+                alert("123")
+            }
+        })
+    })
+</script>
+<hr/>
+<h3>2、多文件上传</h3>
+<form method="POST" action="/upload2" enctype="multipart/form-data">
+    上传人：<input type="text" name="userName" /><br/>
+    文件一：<input type="file" name="file" /><br/>
+    文件二：<input type="file" name="file" /><br/><br/>
+    <input type="submit" value="Submit" />
+</form>
+</body>
+</html>
+<hr/>

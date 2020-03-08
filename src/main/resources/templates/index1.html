@@ -1,0 +1,327 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.5">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>Album example · Bootstrap</title>
+
+    <script type="text/javascript" src="http://localhost:8080/js/jquery-1.12.4.min.js"></script>
+
+    <!-- Bootstrap core CSS -->
+<!--    <link href="http://localhost:8080/bootstrap-3.3.7-dist/bootstrap.min.css" rel="stylesheet">-->
+<!--    <script src="http://localhost:8080/js/bootstrap.min.js"></script>-->
+<!--    <script src="http://localhost:8080/js/bootstrap.bundle.min.js" ></script>-->
+
+
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="http://localhost:8080/css/album.css" rel="stylesheet">
+
+    <script type="text/javascript">
+
+        $(function(){
+            showList(1)
+        });
+
+        function showList(pn){
+            $.ajax({
+                url:"http://localhost:8080/lost",
+                data:"pn="+pn,
+                type:"GET",
+                success:function(result){
+                    //1.解析并显示table
+                    buildLostsTable(result);
+                    //2.解析并显示分页信息
+                    buildPageNav(result);
+                }
+            })
+        }
+        function buildLostsTable(result) {
+            /*<div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                        <div class="card-body">
+                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                </div>
+                                <small class="text-muted">9 mins</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+              <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                  <img src="..." alt="...">
+                  <div class="caption">
+                    <h3>Thumbnail label</h3>
+                    <p>...</p>
+                    <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                  </div>
+                </div>
+              </div>
+                */
+            var losts = result.extend.losts
+            $.each(losts,function(index,item){
+
+
+                var topDiv = $("<div></div>").addClass("col-md-4")
+
+                // width="100%" height="500px"
+                var image = $("<img class='img-responsive' >").addClass("card-img-top").attr("src",item.picture)
+
+                var scDiv = $("<div></div>").addClass("card mb-4 shadow-sm").append(image)
+                    .appendTo(topDiv)
+
+
+
+                var cardDiv = $("<div></div>").addClass("card-body").append($("<p></p>").addClass("card-text")
+                    .text(item.name)).appendTo(scDiv)
+
+                var buttonDiv=$("<div></div>").addClass("d-flex justify-content-between align-items-center")
+                    .appendTo(cardDiv)
+
+                var viewBtn = $("<button>view</button>").addClass("btn btn-sm btn-outline-secondary")
+                    .click(function(){
+                    // <dl class="dl-horizontal">
+                    //     <dt>...</dt>
+                    //     <dd>...</dd>
+                    // </dl>
+                    //     var lostName = $("<dt>")
+
+                        alert(item.name)
+                        var lostName = $("<p><strong>name:</strong></p>").append($("<p></p>").text("  "+item.name))
+                            .appendTo($("#modalBody"))
+                        var lostDate = $("<p><strong>lostDate:</strong></p>").append($("<p></p>").text("  "+item.lostDate))
+                            .appendTo($("#modalBody"))
+                        var lostDate = $("<p><strong>lostPlace:</strong></p>").append($("<p></p>").text("  "+item.lostPlace))
+                            .appendTo($("#modalBody"))
+                        var lostDate = $("<p><strong>otherMessage:</strong></p>").append($("<p></p>").text("  "+item.otherMsg))
+                            .appendTo($("#modalBody"))
+                        $("#lostMsg").modal({
+                            backdrop:"static"
+                        })
+                    })
+                var butDiv = $("<div></div>").addClass("btn-group")
+                    .append(viewBtn)
+                    .appendTo(buttonDiv)
+
+                topDiv.appendTo($("#topTable"))
+            })
+
+        }
+        function buildPageNav(result) {
+
+        }
+
+    </script>
+</head>
+<body>
+<header>
+<!--  lost详细信息模态框  -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="lostMsg">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Modal title</h4>
+                </div>
+                <div class="modal-body" id="modalBody">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="closeModal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Brand</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+                    <li><a href="#">Link</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">One more separated link</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Link</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+<!--    <div class="collapse bg-dark" id="navbarHeader">-->
+<!--        <div class="container">-->
+<!--            <div class="row">-->
+<!--                <div class="col-sm-8 col-md-7 py-4">-->
+<!--                    <h4 class="text-white">About</h4>-->
+<!--                    <p class="text-muted">Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off to some social networking sites or contact information.</p>-->
+<!--                </div>-->
+<!--                <div class="col-sm-4 offset-md-1 py-4">-->
+<!--                    <h4 class="text-white">Contact</h4>-->
+<!--                    <ul class="list-unstyled">-->
+<!--                        <li><a href="#" class="text-white">Follow on Twitter</a></li>-->
+<!--                        <li><a href="#" class="text-white">Like on Facebook</a></li>-->
+<!--                        <li><a href="#" class="text-white">Email me</a></li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="navbar navbar-dark bg-dark shadow-sm">-->
+<!--        <div class="container d-flex justify-content-between">-->
+<!--            <a href="#" class="navbar-brand d-flex align-items-center">-->
+<!--                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2" viewBox="0 0 24 24" focusable="false"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>-->
+<!--                <strong>Album</strong>-->
+<!--            </a>-->
+<!--            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">-->
+<!--                <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
+<!--        </div>-->
+<!--    </div>-->
+</header>
+
+<main role="main">
+
+<!--    <section class="jumbotron text-center">-->
+<!--        <div class="container">-->
+<!--            <h1 class="jumbotron-heading">Album example</h1>-->
+<!--            <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>-->
+<!--            <p>-->
+<!--                <a href="#" class="btn btn-primary my-2">Main call to action</a>-->
+<!--                <a href="#" class="btn btn-secondary my-2">Secondary action</a>-->
+<!--            </p>-->
+<!--        </div>-->
+<!--    </section>-->
+
+
+
+
+    <div class="album py-5 bg-light">
+        <div class="container">
+
+            <div class="row" id="topTable">
+
+                <!-- kaishi -->
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 col-md-4">
+                    <div class="thumbnail">
+                        <img src="..." alt="...">
+                        <div class="caption">
+                            <h3>Thumbnail label</h3>
+                            <p>...</p>
+                            <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="thumbnail">
+                        <img src="..." alt="...">
+                        <div class="caption">
+                            <h3>Thumbnail label</h3>
+                            <p>...</p>
+                            <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer class="text-muted">
+    <div class="container">
+        <p class="float-right">
+            <a href="#">Back to top</a>
+        </p>
+        <p>Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
+        <p>New to Bootstrap? <a href="https://getbootstrap.com/">Visit the homepage</a> or read our <a href="http://localhost8080">getting started guide</a>.</p>
+    </div>
+</footer>
+<script type="text/javascript">
+    $("#closeModal").click(function(){
+        $("#modalBody").empty()
+        $("#lostMsg").modal("hide")
+    })
+</script>
+<!--<script src="http://localhost:8080/js/jquery-1.12.4.min.js" ></script>-->
+<!--<script>window.jQuery || document.write('<script src="http://localhost:8080/js/jquery-1.12.4.min.js"><\/script>')-->
+<!--</script><script src="http://localhost:8080/js/bootstrap.bundle.min.js" ></script>-->
+</body>
+</html>
